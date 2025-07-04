@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Misolytic Dispatches 🪐</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      max-width: 800px;
+      margin: 40px auto 80px auto;
+      padding: 0 20px;
+      background: linear-gradient(135deg, #f3e8ff, #e0b3ff);
+      color: #3a0ca3;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      color: #7209b7;
+      margin-bottom: 25px;
+      text-shadow: 2px 2px #c77dff;
+    }
+
+    .tag-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .filter-tag {
+      background-color: #9d4edd;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: capitalize;
+      border: 2px solid transparent;
+      box-shadow: 0 0 10px #c77dff88;
+    }
+
+    .filter-tag:hover {
+      background-color: #7b2cbf;
+    }
+
+    .filter-tag.active {
+      background-color: white;
+      color: #7b2cbf;
+      border-color: #7b2cbf;
+    }
+
+    .post {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 35px;
+      box-shadow: 0 4px 12px rgba(114, 9, 183, 0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .post:hover {
+      transform: scale(1.01);
+    }
+
+    .post-date {
+      font-weight: bold;
+      color: #7b2cbf;
+      margin-bottom: 12px;
+    }
+
+    .post-content {
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      color: #3a0ca3;
+    }
+
+    .tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background-color: #9d4edd;
+      color: white;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-transform: capitalize;
+      transition: background-color 0.2s ease;
+    }
+
+    .tag:hover {
+      background-color: #7b2cbf;
+    }
+
+    .home-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: inline-flex;
+      align-items: center;
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #7b2cbf;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      z-index: 1000;
+    }
+
+    .home-button:hover {
+      background-color: #c77dff;
+      transform: scale(1.05);
+    }
+
+    .home-button svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      fill: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚀 Misolytic Dispatches</h1>
+
+  <!-- Tag filter bar -->
+  <div class="tag-filter" id="tagFilter">
+    <!-- JS will inject tags here -->
+  </div>
+
+  <!-- Posts Section -->
+  <div class="posts-container">
+
+    <div class="post" data-tags="party">
+      <div class="post-date">2025-07-01</div>
+      <div class="post-content">
+        MISOLYTIC PARTY CREATED
+        The misolytic party has been created!!!
+      </div>
+      <div class="tags">
+        <div class="tag">party</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Home button -->
+  <a href="index.html" class="home-button" aria-label="Go to Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+    Home
+  </a>
+
+  <!-- JS for tag filtering -->
+  <script>
+    const posts = document.querySelectorAll('.post');
+    const tagFilter = document.getElementById('tagFilter');
+
+    const tagsSet = new Set();
+    posts.forEach(post => {
+      const tags = post.dataset.tags.split(' ');
+      tags.forEach(t => tagsSet.add(t));
+    });
+
+    const tags = Array.from(tagsSet).sort();
+
+    tags.forEach(tag => {
+      const btn = document.createElement('div');
+      btn.className = 'filter-tag';
+      btn.textContent = tag;
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('active')) {
+          btn.classList.remove('active');
+          showAllPosts();
+        } else {
+          clearActiveTags();
+          btn.classList.add('active');
+          filterPostsByTag(tag);
+        }
+      });
+      tagFilter.appendChild(btn);
+    });
+
+    function clearActiveTags() {
+      document.querySelectorAll('.filter-tag.active').forEach(el => el.classList.remove('active'));
+    }
+
+    function showAllPosts() {
+      posts.forEach(post => post.style.display = '');
+    }
+
+    function filterPostsByTag(tag) {
+      posts.forEach(post => {
+        const postTags = post.dataset.tags.split(' ');
+        post.style.display = postTags.includes(tag) ? '' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>
